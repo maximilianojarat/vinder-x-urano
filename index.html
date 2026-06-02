@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vinder Chile SpA · Informe por Año · URANO</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0f;--surface:#111118;--surface2:#18181f;
+  --border:rgba(255,255,255,0.07);--accent:#c8f544;
+  --a2:#4ade80;--a3:#38bdf8;--a4:#f97316;--a5:#a78bfa;
+  --muted:rgba(255,255,255,0.35);--text:#f0f0f0;--text2:rgba(240,240,240,0.7);
+  --y24:#f97316;--y25:#c8f544;--y26:#38bdf8;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.6;min-height:100vh}
+.hdr{padding:44px 52px 32px;border-bottom:1px solid var(--border)}
+.badge{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);background:rgba(200,245,68,.08);border:1px solid rgba(200,245,68,.2);padding:4px 12px;display:inline-block;margin-bottom:16px}
+h1{font-family:'DM Serif Display',serif;font-size:clamp(28px,4vw,50px);font-weight:400;letter-spacing:-.02em}
+h1 em{font-style:italic;color:var(--accent)}
+.meta{margin-top:18px;display:flex;gap:32px;flex-wrap:wrap}
+.mi{display:flex;flex-direction:column;gap:2px}
+.ml{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.mv{font-size:12px;color:var(--text2)}
+.mnav{padding:0 52px;border-bottom:1px solid var(--border);display:flex;overflow-x:auto}
+.mtab{padding:13px 20px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+.mtab:hover{color:var(--text)}
+.mtab.on{color:var(--accent);border-bottom-color:var(--accent)}
+.sec{display:none;padding:48px 52px}
+.sec.on{display:block}
+.shd{margin-bottom:32px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.snum{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.stitle{font-family:'DM Serif Display',serif;font-size:clamp(20px,3vw,32px);font-weight:400}
+.sdesc{font-size:12px;color:var(--muted);margin-top:6px;max-width:540px}
+.ytabs{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap}
+.ytab{font-family:'DM Mono',monospace;font-size:11px;padding:7px 18px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;border-radius:2px;transition:all .2s}
+.ytab:hover{color:var(--text)}
+.ytab.y24.on{background:rgba(249,115,22,.12);border-color:rgba(249,115,22,.4);color:var(--y24)}
+.ytab.y25.on{background:rgba(200,245,68,.12);border-color:rgba(200,245,68,.4);color:var(--y25)}
+.ytab.y26.on{background:rgba(56,189,248,.12);border-color:rgba(56,189,248,.4);color:var(--y26)}
+.ytab.all.on{background:rgba(167,139,250,.12);border-color:rgba(167,139,250,.4);color:var(--a5)}
+.ypane{display:none}
+.ypane.on{display:block}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:36px}
+.kcard{background:var(--surface);border:1px solid var(--border);padding:20px;position:relative;overflow:hidden}
+.kcard::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--kc,var(--accent))}
+.klbl{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.kval{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;line-height:1}
+.ksub{font-size:11px;color:var(--muted);margin-top:4px}
+.cbox{background:var(--surface);border:1px solid var(--border);padding:24px;margin-bottom:18px}
+.ctitle{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.csub{font-family:'DM Serif Display',serif;font-size:16px;margin-bottom:18px}
+.cgrid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+canvas.chart{width:100%;display:block}
+.dt{width:100%;border-collapse:collapse}
+.dt th{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+.dt td{padding:10px 12px;font-size:12px;color:var(--text2);border-bottom:1px solid rgba(255,255,255,.03)}
+.dt tr:hover td{background:rgba(255,255,255,.02);color:var(--text)}
+.rb{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;font-size:9px;font-weight:600;background:var(--surface2);color:var(--muted);border-radius:2px}
+.rb.t1{background:rgba(200,245,68,.2);color:var(--accent)}
+.rb.t3{background:rgba(200,245,68,.1);color:var(--accent)}
+.amtc{font-family:'Syne',sans-serif;font-weight:600;color:var(--text);font-size:13px}
+.barm{height:3px;background:var(--accent);border-radius:2px;margin-top:3px;opacity:.4}
+.note{background:rgba(200,245,68,.04);border:1px solid rgba(200,245,68,.15);padding:14px 18px;margin-top:18px;font-size:12px;color:var(--muted)}
+.note strong{color:var(--accent)}
+.cmp3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:24px}
+.cmp-card{background:var(--surface);border:1px solid var(--border);padding:20px;text-align:center}
+.cmp-year{font-size:10px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px}
+.cmp-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800}
+.cmp-sub{font-size:10px;color:var(--muted);margin-top:4px}
+@media(max-width:800px){.hdr,.mnav,.sec{padding-left:16px;padding-right:16px}.cgrid2,.cmp3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="badge">Informe Comercial · Desglose Anual · URANO × Vinder</div>
+  <h1>Vinder Chile SpA<br><em>Datos por Año</em></h1>
+  <div class="meta">
+    <div class="mi"><span class="ml">Período</span><span class="mv">Oct 2024 – Jun 2026</span></div>
+    <div class="mi"><span class="ml">Facturas</span><span class="mv">963 registros Odoo</span></div>
+    <div class="mi"><span class="ml">2024</span><span class="mv">104 facturas · oct–dic</span></div>
+    <div class="mi"><span class="ml">2025</span><span class="mv">565 facturas · año completo</span></div>
+    <div class="mi"><span class="ml">2026</span><span class="mv">294 facturas · ene–jun</span></div>
+  </div>
+</header>
+
+<nav class="mnav">
+  <div class="mtab on" onclick="showSec('p1',this)">01 · Estructura de Ingresos</div>
+  <div class="mtab" onclick="showSec('p2',this)">02 · Top 20 Clientes</div>
+  <div class="mtab" onclick="showSec('p3',this)">03 · Histórico Mensual</div>
+  <div class="mtab" onclick="showSec('p4',this)">04 · Comparativo Anual</div>
+</nav>
+
+<!-- ═══ P1 ESTRUCTURA ═══ -->
+<section class="sec on" id="p1">
+  <div class="shd"><div class="snum">Pregunta 01</div><div class="stitle">Estructura de Ingresos por Línea</div><div class="sdesc">Selecciona el año para ver la distribución porcentual de ingresos por categoría de producto.</div></div>
+  <div class="ytabs">
+    <div class="ytab all on" onclick="showYear('p1','all',this)">Todos</div>
+    <div class="ytab y24" onclick="showYear('p1','y24',this)">2024 (oct–dic)</div>
+    <div class="ytab y25" onclick="showYear('p1','y25',this)">2025</div>
+    <div class="ytab y26" onclick="showYear('p1','y26',this)">2026 (ene–jun)</div>
+  </div>
+
+  <div class="ypane on" id="p1-all">
+    <div class="kgrid">
+      <div class="kcard" style="--kc:#a78bfa"><div class="klbl">Total período</div><div class="kval">$923,9M</div><div class="ksub">oct 2024 – jun 2026</div></div>
+      <div class="kcard" style="--kc:var(--y24)"><div class="klbl">2024 (3 meses)</div><div class="kval">$90,0M</div><div class="ksub">104 facturas</div></div>
+      <div class="kcard" style="--kc:var(--y25)"><div class="klbl">2025 (12 meses)</div><div class="kval">$539,5M</div><div class="ksub">565 facturas</div></div>
+      <div class="kcard" style="--kc:var(--y26)"><div class="klbl">2026 (6 meses)</div><div class="kval">$294,4M</div><div class="ksub">294 facturas</div></div>
+    </div>
+    <div class="cgrid2">
+      <div class="cbox"><div class="ctitle">Participación por línea</div><div class="csub">Todo el período · % del total</div><canvas id="c1a" class="chart" height="300"></canvas></div>
+      <div class="cbox"><div class="ctitle">Chile vs China</div><div class="csub">Origen fabricación · todo el período</div><canvas id="c1b" class="chart" height="300"></canvas></div>
+    </div>
+    <div class="cbox"><div class="ctitle">Tabla detalle · todas las líneas</div><div class="csub">Total período</div><table class="dt"><thead><tr><th>#</th><th>Línea</th><th>Monto CLP</th><th>%</th><th>Barra</th></tr></thead><tbody id="tb-all"></tbody></table></div>
+  </div>
+
+  <div class="ypane" id="p1-y24">
+    <div class="kgrid">
+      <div class="kcard" style="--kc:var(--y24)"><div class="klbl">Total 2024</div><div class="kval">$90,0M</div><div class="ksub">oct–dic · 3 meses</div></div>
+      <div class="kcard" style="--kc:var(--y24)"><div class="klbl">Eco Personalizada</div><div class="kval">73,1%</div><div class="ksub">línea dominante</div></div>
+      <div class="kcard" style="--kc:var(--y24)"><div class="klbl">Chile / China</div><div class="kval">75% / 25%</div><div class="ksub">fuerte predominio local</div></div>
+      <div class="kcard" style="--kc:var(--y24)"><div class="klbl">Líneas activas</div><div class="kval">8</div><div class="ksub">categorías con ventas</div></div>
+    </div>
+    <div class="cgrid2">
+      <div class="cbox"><div class="ctitle">Participación por línea</div><div class="csub">2024 · oct–dic</div><canvas id="c24a" class="chart" height="300"></canvas></div>
+      <div class="cbox"><div class="ctitle">Chile vs China</div><div class="csub">2024 · $67,9M vs $22,2M</div><canvas id="c24b" class="chart" height="300"></canvas></div>
+    </div>
+    <div class="cbox"><div class="ctitle">Detalle por línea · 2024</div><div class="csub">CLP sin impuestos</div><table class="dt"><thead><tr><th>#</th><th>Línea</th><th>Monto CLP</th><th>%</th><th>Barra</th></tr></thead><tbody id="tb-24"></tbody></table></div>
+  </div>
+
+  <div class="ypane" id="p1-y25">
+    <div class="kgrid">
+      <div class="kcard" style="--kc:var(--y25)"><div class="klbl">Total 2025</div><div class="kval">$539,5M</div><div class="ksub">año completo · 12 meses</div></div>
+      <div class="kcard" style="--kc:var(--y25)"><div class="klbl">Eco Personalizada</div><div class="kval">65,1%</div><div class="ksub">baja 8pp vs 2024</div></div>
+      <div class="kcard" style="--kc:var(--y25)"><div class="klbl">Chile / China</div><div class="kval">44% / 56%</div><div class="ksub">China supera a Chile</div></div>
+      <div class="kcard" style="--kc:var(--y25)"><div class="klbl">Líneas activas</div><div class="kval">15</div><div class="ksub">+7 líneas vs 2024</div></div>
+    </div>
+    <div class="cgrid2">
+      <div class="cbox"><div class="ctitle">Participación por línea</div><div class="csub">2025 · año completo</div><canvas id="c25a" class="chart" height="300"></canvas></div>
+      <div class="cbox"><div class="ctitle">Chile vs China</div><div class="csub">2025 · $237M vs $302M</div><canvas id="c25b" class="chart" height="300"></canvas></div>
+    </div>
+    <div class="cbox"><div class="ctitle">Detalle por línea · 2025</div><div class="csub">CLP sin impuestos</div><table class="dt"><thead><tr><th>#</th><th>Línea</th><th>Monto CLP</th><th>%</th><th>Barra</th></tr></thead><tbody id="tb-25"></tbody></table></div>
+  </div>
+
+  <div class="ypane" id="p1-y26">
+    <div class="kgrid">
+      <div class="kcard" style="--kc:var(--y26)"><div class="klbl">Total 2026</div><div class="kval">$294,4M</div><div class="ksub">ene–jun · 6 meses</div></div>
+      <div class="kcard" style="--kc:var(--y26)"><div class="klbl">Eco Personalizada</div><div class="kval">61,9%</div><div class="ksub">sigue bajando</div></div>
+      <div class="kcard" style="--kc:var(--y26)"><div class="klbl">Chile / China</div><div class="kval">66% / 34%</div><div class="ksub">Chile recupera predominio</div></div>
+      <div class="kcard" style="--kc:var(--y26)"><div class="klbl">Riñón sube</div><div class="kval">11,2%</div><div class="ksub">2do puesto igual que 2024</div></div>
+    </div>
+    <div class="cgrid2">
+      <div class="cbox"><div class="ctitle">Participación por línea</div><div class="csub">2026 · ene–jun</div><canvas id="c26a" class="chart" height="300"></canvas></div>
+      <div class="cbox"><div class="ctitle">Chile vs China</div><div class="csub">2026 · $192,9M vs $101,5M</div><canvas id="c26b" class="chart" height="300"></canvas></div>
+    </div>
+    <div class="cbox"><div class="ctitle">Detalle por línea · 2026</div><div class="csub">CLP sin impuestos · ene–jun</div><table class="dt"><thead><tr><th>#</th><th>Línea</th><th>Monto CLP</th><th>%</th><th>Barra</th></tr></thead><tbody id="tb-26"></tbody></table></div>
+    <div class="note"><strong>Proyección:</strong> Promedio mensual ene–may 2026 = $55,7M. Extrapolando a 12 meses → ~$668M, equivalente al 66,8% de la meta de $1.000M declarada en el brief.</div>
+  </div>
+</section>
+
+<!-- ═══ P2 CLIENTES ═══ -->
+<section class="sec" id="p2">
+  <div class="shd"><div class="snum">Pregunta 03</div><div class="stitle">Top 20 Clientes por Año</div><div class="sdesc">Ranking de clientes por volumen facturado sin impuestos, separado por año.</div></div>
+  <div class="ytabs">
+    <div class="ytab all on" onclick="showYear('p2','all',this)">Comparativo</div>
+    <div class="ytab y24" onclick="showYear('p2','y24',this)">2024</div>
+    <div class="ytab y25" onclick="showYear('p2','y25',this)">2025</div>
+    <div class="ytab y26" onclick="showYear('p2','y26',this)">2026</div>
+  </div>
+
+  <div class="ypane on" id="p2-all">
+    <div class="kgrid">
+      <div class="kcard" style="--kc:var(--y24)"><div class="klbl">Top 1 · 2024</div><div class="kval">Bata</div><div class="ksub">$12,8M · oct–dic</div></div>
+      <div class="kcard" style="--kc:var(--y25)"><div class="klbl">Top 1 · 2025</div><div class="kval">Bata</div><div class="ksub">$76,3M · creció 5,9×</div></div>
+      <div class="kcard" style="--kc:var(--y26)"><div class="klbl">Top 1 · 2026</div><div class="kval">Comer. Under</div><div class="ksub">$33,8M · ene–jun</div></div>
+      <div class="kcard" style="--kc:var(--a5)"><div class="klbl">Alerta</div><div class="kval">Badamax</div><div class="ksub">$60M en 24–25 → $0 en 2026</div></div>
+    </div>
+    <div class="cbox"><div class="ctitle">Top 10 clientes · evolución año a año</div><div class="csub">CLP sin impuestos por año</div><canvas id="c2cmp" class="chart" height="380"></canvas></div>
+    <div class="cgrid2">
+      <div class="cbox"><div class="ctitle">Concentración Top N por año</div><div class="csub">% del total anual</div><canvas id="c2conc" class="chart" height="260"></canvas></div>
+      <div class="cbox"><div class="ctitle">Clientes en Top 20 · recurrencia</div><div class="csub">Cuántos años aparecen</div><canvas id="c2recu" class="chart" height="260"></canvas></div>
+    </div>
+  </div>
+
+  <div class="ypane" id="p2-y24">
+    <div class="kgrid">
+      <div class="kcard" style="--kc:var(--y24)"><div class="klbl">Total 2024</div><div class="kval">$90,0M</div><div class="ksub">oct–dic</div></div>
+      <div class="kcard" style="--kc:var(--y24)"><div class="klbl">Top 5 concentra</div><div class="kval">46%</div><div class="ksub">del total 2024</div></div>
+      <div class="kcard" style="--kc:var(--y24)"><div class="klbl">Ticket promedio</div><div class="kval">$866K</div><div class="ksub">por factura</div></div>
+      <div class="kcard" style="--kc:var(--y24)"><div class="klbl">Clientes únicos</div><div class="kval">~95</div><div class="ksub">estimado</div></div>
+    </div>
+    <div class="cbox"><div class="ctitle">Ranking visual · 2024</div><div class="csub">Top 20 clientes oct–dic 2024</div><canvas id="c2_24" class="chart" height="360"></canvas></div>
+    <div class="cbox" style="margin-top:18px"><div class="ctitle">Tabla Top 20 · 2024</div><div class="csub">CLP sin impuestos</div><table class="dt"><thead><tr><th>#</th><th>Cliente</th><th>Monto CLP</th><th>% del año</th><th>Barra</th></tr></thead><tbody id="tb-c24"></tbody></table></div>
+  </div>
+
+  <div class="ypane" id="p2-y25">
+    <div class="kgrid">
+      <div class="kcard" style="--kc:var(--y25)"><div class="klbl">Total 2025</div><div class="kval">$539,5M</div><div class="ksub">año completo</div></div>
+      <div class="kcard" style="--kc:var(--y25)"><div class="klbl">Top 5 concentra</div><div class="kval">38%</div><div class="ksub">del total 2025</div></div>
+      <div class="kcard" style="--kc:var(--y25)"><div class="klbl">Ticket promedio</div><div class="kval">$955K</div><div class="ksub">por factura</div></div>
+      <div class="kcard" style="--kc:var(--y25)"><div class="klbl">Clientes únicos</div><div class="kval">~300</div><div class="ksub">estimado</div></div>
+    </div>
+    <div class="cbox"><div class="ctitle">Ranking visual · 2025</div><div class="csub">Top 20 clientes 2025</div><canvas id="c2_25" class="chart" height="360"></canvas></div>
+    <div class="cbox" style="margin-top:18px"><div class="ctitle">Tabla Top 20 · 2025</div><div class="csub">CLP sin impuestos</div><table class="dt"><thead><tr><th>#</th><th>Cliente</th><th>Monto CLP</th><th>% del año</th><th>Barra</th></tr></thead><tbody id="tb-c25"></tbody></table></div>
+  </div>
+
+  <div class="ypane" id="p2-y26">
+    <div class="kgrid">
+      <div class="kcard" style="--kc:var(--y26)"><div class="klbl">Total 2026</div><div class="kval">$294,4M</div><div class="ksub">ene–jun</div></div>
+      <div class="kcard" style="--kc:var(--y26)"><div class="klbl">Top 5 concentra</div><div class="kval">39%</div><div class="ksub">del total 2026</div></div>
+      <div class="kcard" style="--kc:var(--y26)"><div class="klbl">Ticket promedio</div><div class="kval">$1,0M</div><div class="ksub">por factura</div></div>
+      <div class="kcard" style="--kc:var(--y26)"><div class="klbl">Badamax</div><div class="kval">$0</div><div class="ksub">desaparece del ranking</div></div>
+    </div>
+    <div class="cbox"><div class="ctitle">Ranking visual · 2026</div><div class="csub">Top 20 clientes ene–jun 2026</div><canvas id="c2_26" class="chart" height="360"></canvas></div>
+    <div class="cbox" style="margin-top:18px"><div class="ctitle">Tabla Top 20 · 2026</div><div class="csub">CLP sin impuestos</div><table class="dt"><thead><tr><th>#</th><th>Cliente</th><th>Monto CLP</th><th>% del año</th><th>Barra</th></tr></thead><tbody id="tb-c26"></tbody></table></div>
+    <div class="note"><strong>Alerta:</strong> Badamax Retail ($60M en 2024–2025) no aparece en 2026. WARECLOUDS SPA también desaparece. Revisar si son clientes perdidos o cambio de razón social.</div>
+  </div>
+</section>
+
+<!-- ═══ P3 MENSUAL ═══ -->
+<section class="sec" id="p3">
+  <div class="shd"><div class="snum">Pregunta 04</div><div class="stitle">Histórico de Ventas Mensuales</div><div class="sdesc">Evolución mes a mes por año, con desglose por línea de producto.</div></div>
+  <div class="ytabs">
+    <div class="ytab all on" onclick="showYear('p3','all',this)">Línea completa</div>
+    <div class="ytab y24" onclick="showYear('p3','y24',this)">2024</div>
+    <div class="ytab y25" onclick="showYear('p3','y25',this)">2025</div>
+    <div class="ytab y26" onclick="showYear('p3','y26',this)">2026</div>
+  </div>
+
+  <div class="ypane on" id="p3-all">
+    <div class="kgrid">
+      <div class="kcard" style="--kc:var(--y25)"><div class="klbl">Mejor mes</div><div class="kval">Dic 2025</div><div class="ksub">$87,5M</div></div>
+      <div class="kcard" style="--kc:var(--accent)"><div class="klbl">Promedio mensual 2025</div><div class="kval">$44,9M</div><div class="ksub">12 meses</div></div>
+      <div class="kcard" style="--kc:var(--y26)"><div class="klbl">Promedio mensual 2026</div><div class="kval">$55,7M</div><div class="ksub">ene–may · +24% vs 2025</div></div>
+      <div class="kcard" style="--kc:var(--a5)"><div class="klbl">Meta 2026</div><div class="kval">$1.000M</div><div class="ksub">ritmo actual → $668M (67%)</div></div>
+    </div>
+    <div class="cbox"><div class="ctitle">Ventas mensuales · período completo</div><div class="csub">CLP sin impuestos · colores por año</div><canvas id="c3all" class="chart" height="320"></canvas></div>
+    <div class="cgrid2">
+      <div class="cbox"><div class="ctitle">Mix por línea · período completo</div><div class="csub">Eco Pers. vs Resto</div><canvas id="c3mix" class="chart" height="280"></canvas></div>
+      <div class="cbox"><div class="ctitle">Chile vs China · mes a mes</div><div class="csub">Promedio anual distribuido</div><canvas id="c3origen" class="chart" height="280"></canvas></div>
+    </div>
+    <div class="cbox"><div class="ctitle">Tabla mensual completa</div><div class="csub">CLP sin impuestos por línea principal</div><div style="overflow-x:auto"><table class="dt"><thead><tr><th>Mes</th><th>Eco Pers.</th><th>Riñón</th><th>B.Compost</th><th>Cam.Pers.</th><th>Eco Gén.</th><th>B.Plást.</th><th>Otros</th><th>TOTAL</th></tr></thead><tbody id="tb-mall"></tbody></table></div></div>
+  </div>
+
+  <div class="ypane" id="p3-y24">
+    <div class="kgrid">
+      <div class="kcard" style="--kc:var(--y24)"><div class="klbl">Nov 2024</div><div class="kval">$45,4M</div><div class="ksub">mejor mes del año</div></div>
+      <div class="kcard" style="--kc:var(--y24)"><div class="klbl">Oct 2024</div><div class="kval">$19,9M</div><div class="ksub">primer mes Odoo</div></div>
+      <div class="kcard" style="--kc:var(--y24)"><div class="klbl">Dic 2024</div><div class="kval">$24,7M</div><div class="ksub">baja vs noviembre</div></div>
+      <div class="kcard" style="--kc:var(--y24)"><div class="klbl">Promedio</div><div class="kval">$30,0M</div><div class="ksub">3 meses</div></div>
+    </div>
+    <div class="cbox"><div class="ctitle">Ventas mensuales · 2024</div><div class="csub">oct – dic 2024 por línea</div><canvas id="c3_24" class="chart" height="280"></canvas></div>
+    <div class="cbox" style="margin-top:18px"><div class="ctitle">Tabla · 2024</div><div class="csub">CLP sin impuestos</div><div style="overflow-x:auto"><table class="dt"><thead><tr><th>Mes</th><th>Eco Pers.</th><th>Riñón</th><th>B.Compost</th><th>Cam.Pers.</th><th>Eco Gén.</th><th>B.Plást.</th><th>Otros</th><th>TOTAL</th></tr></thead><tbody id="tb-m24"></tbody></table></div></div>
+  </div>
+
+  <div class="ypane" id="p3-y25">
+    <div class="kgrid">
+      <div class="kcard" style="--kc:var(--y25)"><div class="klbl">Mejor mes</div><div class="kval">Dic 2025</div><div class="ksub">$87,5M</div></div>
+      <div class="kcard" style="--kc:var(--y25)"><div class="klbl">Peor mes</div><div class="kval">Feb 2025</div><div class="ksub">$29,9M</div></div>
+      <div class="kcard" style="--kc:var(--y25)"><div class="klbl">Promedio</div><div class="kval">$44,9M</div><div class="ksub">12 meses</div></div>
+      <div class="kcard" style="--kc:var(--y25)"><div class="klbl">H1 vs H2</div><div class="kval">$229M / $310M</div><div class="ksub">H2 +35% sobre H1</div></div>
+    </div>
+    <div class="cbox"><div class="ctitle">Ventas mensuales · 2025</div><div class="csub">Año completo por línea</div><canvas id="c3_25" class="chart" height="300"></canvas></div>
+    <div class="cbox" style="margin-top:18px"><div class="ctitle">Tabla · 2025</div><div class="csub">CLP sin impuestos</div><div style="overflow-x:auto"><table class="dt"><thead><tr><th>Mes</th><th>Eco Pers.</th><th>Riñón</th><th>B.Compost</th><th>Cam.Pers.</th><th>Eco Gén.</th><th>B.Plást.</th><th>Otros</th><th>TOTAL</th></tr></thead><tbody id="tb-m25"></tbody></table></div></div>
+  </div>
+
+  <div class="ypane" id="p3-y26">
+    <div class="kgrid">
+      <div class="kcard" style="--kc:var(--y26)"><div class="klbl">Mejor mes</div><div class="kval">Abr 2026</div><div class="ksub">$69,8M</div></div>
+      <div class="kcard" style="--kc:var(--y26)"><div class="klbl">Promedio ene–may</div><div class="kval">$55,7M</div><div class="ksub">+24% vs promedio 2025</div></div>
+      <div class="kcard" style="--kc:var(--y26)"><div class="klbl">Jun 2026</div><div class="kval">$15,6M</div><div class="ksub">mes incompleto (corte)</div></div>
+      <div class="kcard" style="--kc:var(--y26)"><div class="klbl">Proyectado anual</div><div class="kval">~$668M</div><div class="ksub">67% de la meta $1.000M</div></div>
+    </div>
+    <div class="cbox"><div class="ctitle">Ventas mensuales · 2026</div><div class="csub">ene – jun 2026 (jun = parcial)</div><canvas id="c3_26" class="chart" height="280"></canvas></div>
+    <div class="cbox" style="margin-top:18px"><div class="ctitle">Tabla · 2026</div><div class="csub">CLP sin impuestos</div><div style="overflow-x:auto"><table class="dt"><thead><tr><th>Mes</th><th>Eco Pers.</th><th>Riñón</th><th>B.Compost</th><th>Cam.Pers.</th><th>Eco Gén.</th><th>B.Plást.</th><th>Otros</th><th>TOTAL</th></tr></thead><tbody id="tb-m26"></tbody></table></div></div>
+  </div>
+</section>
+
+<!-- ═══ P4 COMPARATIVO ═══ -->
+<section class="sec" id="p4">
+  <div class="shd"><div class="snum">Comparativo</div><div class="stitle">Vista Anual Comparada</div><div class="sdesc">Side-by-side de los tres años. 2024 = 3 meses; 2026 = 6 meses.</div></div>
+  <div class="cmp3">
+    <div class="cmp-card"><div class="cmp-year" style="color:var(--y24)">2024 · oct–dic</div><div class="cmp-val" style="color:var(--y24)">$90,0M</div><div class="cmp-sub">104 facturas · 8 líneas</div></div>
+    <div class="cmp-card"><div class="cmp-year" style="color:var(--y25)">2025 · año completo</div><div class="cmp-val" style="color:var(--y25)">$539,5M</div><div class="cmp-sub">565 facturas · 15 líneas</div></div>
+    <div class="cmp-card"><div class="cmp-year" style="color:var(--y26)">2026 · ene–jun</div><div class="cmp-val" style="color:var(--y26)">$294,4M</div><div class="cmp-sub">294 facturas · 13 líneas</div></div>
+  </div>
+  <div class="cgrid2">
+    <div class="cbox"><div class="ctitle">Eco Personalizada vs Resto · por año</div><div class="csub">% del total anual</div><canvas id="c4pie" class="chart" height="260"></canvas></div>
+    <div class="cbox"><div class="ctitle">Chile vs China · por año</div><div class="csub">CLP sin impuestos</div><canvas id="c4origen" class="chart" height="260"></canvas></div>
+  </div>
+  <div class="cbox"><div class="ctitle">Todas las líneas · 2024 vs 2025 vs 2026</div><div class="csub">CLP sin impuestos</div><canvas id="c4all" class="chart" height="320"></canvas></div>
+  <div class="cbox" style="margin-top:18px"><div class="ctitle">Tabla comparativa</div><div class="csub">Ingresos y % por línea y año</div><div style="overflow-x:auto"><table class="dt"><thead><tr><th>Línea</th><th>2024</th><th>%</th><th>2025</th><th>%</th><th>2026</th><th>%</th></tr></thead><tbody id="tb-cmp"></tbody></table></div></div>
+</section>
+
+<script>
+// ─── UTILS ───────────────────────────────────────────────────────────────
+function fmt(n){
+  if(n>=1e9) return '$'+(n/1e9).toFixed(1)+'B';
+  if(n>=1e6) return '$'+(n/1e6).toFixed(1)+'M';
+  if(n>=1e3) return '$'+(n/1e3).toFixed(0)+'K';
+  return '$'+Math.round(n).toLocaleString('es-CL');
+}
+function fmtFull(n){ return '$'+Math.round(n).toLocaleString('es-CL'); }
+function showSec(id,el){
+  document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('on');});
+  document.querySelectorAll('.mtab').forEach(function(t){t.classList.remove('on');});
+  document.getElementById(id).classList.add('on');
+  el.classList.add('on');
+}
+function showYear(sec,yr,el){
+  var parent=document.getElementById(sec);
+  parent.querySelectorAll('.ypane').forEach(function(p){p.classList.remove('on');});
+  parent.querySelectorAll('.ytab').forEach(function(t){t.classList.remove('on');});
+  document.getElementById(sec+'-'+yr).classList.add('on');
+  el.classList.add('on');
+}
+
+// ─── PALETTE ─────────────────────────────────────────────────────────────
+var PAL=['#c8f544','#38bdf8','#4ade80','#f97316','#a78bfa','#f472b6','#fb923c','#34d399','#60a5fa','#facc15','#e879f9','#2dd4bf','#f87171','#818cf8','#fbbf24','#86efac'];
+var Y24='#f97316', Y25='#c8f544', Y26='#38bdf8';
+
+// ─── DATA ─────────────────────────────────────────────────────────────────
+var lines24=[
+  {n:'Eco Personalizada',v:65788908},{n:'Riñón',v:10127476},
+  {n:'Camiseta Personalizada',v:4681503},{n:'Basura Compost',v:3453057},
+  {n:'Basura Plástico',v:2482674},{n:'Eco Genérica',v:1547182},
+  {n:'Eco Serigrafía',v:1321146},{n:'Camiseta Genérica',v:641000}
+];
+var lines25=[
+  {n:'Eco Personalizada',v:351457533},{n:'Basura Compost',v:40489313},
+  {n:'Riñón',v:34180940},{n:'Camiseta Personalizada',v:29461379},
+  {n:'Eco Genérica',v:25167136},{n:'Basura Plástico',v:15652442},
+  {n:'Plástico Personalizada',v:11925400},{n:'Eco Serigrafía',v:7506688},
+  {n:'Pan Plástica',v:6128353},{n:'Camiseta Genérica',v:5568643},
+  {n:'Materia Prima',v:4927500},{n:'Bolsa Weed',v:4325000},
+  {n:'Prepicada Rollo',v:1620000},{n:'Sanitización',v:960000},
+  {n:'Tote Serigrafía',v:145000}
+];
+var lines26=[
+  {n:'Eco Personalizada',v:182357180},{n:'Riñón',v:32965456},
+  {n:'Basura Compost',v:22871426},{n:'Camiseta Personalizada',v:16704984},
+  {n:'Eco Genérica',v:10411101},{n:'Basura Plástico',v:8794290},
+  {n:'Pan Plástica',v:4440456},{n:'Plástico Personalizada',v:3878000},
+  {n:'Eco Serigrafía',v:3538088},{n:'Eco Plástico Pers.',v:3221210},
+  {n:'Camiseta Genérica',v:2709522},{n:'Bolsa Weed',v:1716650},
+  {n:'Prepicada Rollo',v:815000}
+];
+var total24=90042946, total25=539515327, total26=294423363;
+
+var clients24=[
+  {n:'Bata Chile SA',v:12834620},{n:'Serena SpA',v:9525376},
+  {n:'Comercializadora RYA',v:9259500},{n:'WARECLOUDS SPA',v:8648200},
+  {n:'Badamax Retail',v:6702496},{n:'Nina Herrera',v:4674110},
+  {n:'Clifford Barrientos',v:3841167},{n:'Jeansblue Spa',v:3743200},
+  {n:'Importadora Kuprem',v:3457600},{n:'Gardenlife SpA',v:3317277},
+  {n:'Silk Perfumes',v:2861596},{n:'IKSO SpA',v:1377500},
+  {n:'MENZIES AGUNSA',v:1320250},{n:'MANOHAY CHILE',v:1313555},
+  {n:'Street Dogs',v:1192000},{n:'JDR Desarrollos',v:1170000},
+  {n:'La Maleta de Frida',v:1128000},{n:'Iswitch sa',v:1089000},
+  {n:'LBB Santiago SpA',v:928114},{n:'La birra chile',v:896800}
+];
+var clients25=[
+  {n:'Bata Chile SA',v:76338120},{n:'Badamax Retail',v:53751460},
+  {n:'COMERCIAL UNDER SPA',v:40436400},{n:'Wareclouds spa',v:21840000},
+  {n:'SONY LATIN AMERICA',v:16817050},{n:'Comer. Grupo Liola',v:15991100},
+  {n:'JDR Desarrollos SpA',v:15210864},{n:'Transportes Dester',v:14324380},
+  {n:'Importadora Kuprem',v:11816600},{n:'Matriz Ideas S.A.',v:11371900},
+  {n:'OSOJI ROBOTICS',v:9303160},{n:'FARMACIAS SIMILARES',v:9300000},
+  {n:'LBB produccion spa',v:8233113},{n:'Empaque Verde SpA',v:8186086},
+  {n:'Maletas Chile SpA',v:7986767},{n:'MORE AMOR SPA',v:7358350},
+  {n:'Supletech',v:6886660},{n:'Tere Gott',v:5702400},
+  {n:'Gardenlife SpA',v:5508955},{n:'WARECLOUDS SPA',v:5441500}
+];
+var clients26=[
+  {n:'COMERCIAL UNDER SPA',v:33781900},{n:'Bata Chile SA',v:28919900},
+  {n:'Assa Chile',v:17502500},{n:'ADF Chile',v:17166000},
+  {n:'JDR Desarrollos SpA',v:14659800},{n:'EMPRESAS JR SA',v:13524700},
+  {n:'Maletas Chile SpA',v:12658110},{n:'Entel PCS',v:8800000},
+  {n:'Intcomex S.A.',v:8580000},{n:'Hotel Corp. Chile',v:7680000},
+  {n:'B2B WEB DIST.',v:5871000},{n:'FARMACIAS SIMILARES',v:5862500},
+  {n:'Specialized Chile',v:5190060},{n:'LBB produccion spa',v:4834956},
+  {n:'Atakama Outdoor',v:4764180},{n:'Comercial Aps Spa',v:4215500},
+  {n:'TOKE SPA',v:4107000},{n:'Jeansblue Spa',v:3426890},
+  {n:'Convenience Chile',v:3253200},{n:'Gardenlife SpA',v:3153700}
+];
+
+var monthly=[
+  {m:'Oct 24',ep:10475062,r:5262696,bc:880492,cp:1680672,eg:465478,bp:925360,tot:19948960,yr:24},
+  {m:'Nov 24',ep:33839111,r:4864780,bc:1431230,cp:3000831,eg:328092,bp:592400,tot:45387570,yr:24},
+  {m:'Dic 24',ep:21474735,r:0,bc:1141335,cp:0,eg:753612,bp:964914,tot:24706416,yr:24},
+  {m:'Ene 25',ep:25470111,r:0,bc:1449910,cp:3975800,eg:192106,bp:256400,tot:31344327,yr:25},
+  {m:'Feb 25',ep:21995050,r:0,bc:1488166,cp:2340099,eg:1956085,bp:975762,tot:29927912,yr:25},
+  {m:'Mar 25',ep:26929653,r:0,bc:2001460,cp:1030000,eg:3104882,bp:1168140,tot:35313130,yr:25},
+  {m:'Abr 25',ep:30338500,r:0,bc:1185580,cp:2150300,eg:192856,bp:1382600,tot:37050812,yr:25},
+  {m:'May 25',ep:50300500,r:0,bc:5588355,cp:1247000,eg:3047216,bp:1615000,tot:62633546,yr:25},
+  {m:'Jun 25',ep:10194650,r:10698000,bc:6067085,cp:3182500,eg:259033,bp:590400,tot:33606068,yr:25},
+  {m:'Jul 25',ep:19703600,r:0,bc:1155177,cp:3462000,eg:1699657,bp:1387480,tot:30602614,yr:25},
+  {m:'Ago 25',ep:13306735,r:7011200,bc:3149200,cp:2614230,eg:2332499,bp:1544360,tot:34347588,yr:25},
+  {m:'Sep 25',ep:24553831,r:1080450,bc:1657740,cp:1839200,eg:4054491,bp:1286600,tot:36924638,yr:25},
+  {m:'Oct 25',ep:36295000,r:598890,bc:8728183,cp:3507750,eg:5081591,bp:422800,tot:62561486,yr:25},
+  {m:'Nov 25',ep:41175226,r:0,bc:4209389,cp:1247500,eg:1807541,bp:1769300,tot:57666136,yr:25},
+  {m:'Dic 25',ep:51194677,r:14792400,bc:3809068,cp:2865000,eg:1439179,bp:3253600,tot:87537070,yr:25},
+  {m:'Ene 26',ep:31445150,r:3282378,bc:1441664,cp:4267880,eg:2336858,bp:916000,tot:45559398,yr:26},
+  {m:'Feb 26',ep:47948000,r:0,bc:2640240,cp:3492354,eg:2130953,bp:1081600,tot:58431261,yr:26},
+  {m:'Mar 26',ep:40123160,r:1002500,bc:12005097,cp:3675200,eg:2972660,bp:1878000,tot:68386575,yr:26},
+  {m:'Abr 26',ep:41725870,r:13122100,bc:2910500,cp:2283850,eg:917909,bp:2155600,tot:69795829,yr:26},
+  {m:'May 26',ep:20389000,r:1193478,bc:3655525,cp:2985700,eg:1729721,bp:2763090,tot:36617900,yr:26},
+  {m:'Jun 26*',ep:726000,r:14365000,bc:218400,cp:0,eg:323000,bp:0,tot:15632400,yr:26}
+];
+
+// ─── CANVAS DRAWING ───────────────────────────────────────────────────────
+var DPR = window.devicePixelRatio || 1;
+
+function setupCanvas(id, h) {
+  var el = document.getElementById(id);
+  if (!el) return null;
+  var ref = el.parentElement;
+  var w = 0;
+  while (ref && w < 10) { w = ref.clientWidth; ref = ref.parentElement; }
+  w = Math.max(w - 48, 100);
+  h = Math.max(h, 60);
+  el.width = Math.round(w * DPR);
+  el.height = Math.round(h * DPR);
+  el.style.width = w + 'px';
+  el.style.height = h + 'px';
+  var ctx = el.getContext('2d');
+  ctx.scale(DPR, DPR);
+  return {ctx: ctx, w: w, h: h};
+}
+
+function drawBar(id, labels, values, colors, opts) {
+  opts = opts || {};
+  var c = setupCanvas(id, opts.h || 300);
+  if (!c) return;
+  var ctx = c.ctx, W = c.w, H = c.h;
+  var pad = opts.pad || {top:20, right:20, bottom:60, left:80};
+  var chartW = W - pad.left - pad.right;
+  var chartH = H - pad.top - pad.bottom;
+  ctx.clearRect(0, 0, W, H);
+
+  var max = Math.max.apply(null, values) * 1.1 || 1;
+  var n = values.length;
+  var barW = Math.max(4, (chartW / n) * 0.7);
+  var gap = (chartW / n) * 0.3;
+
+  // grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  for (var gi = 0; gi <= 4; gi++) {
+    var gy = pad.top + chartH - (gi / 4) * chartH;
+    ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(pad.left + chartW, gy); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = '10px DM Mono,monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText(fmt(max * gi / 4), pad.left - 6, gy + 4);
+  }
+
+  for (var i = 0; i < n; i++) {
+    var x = pad.left + (i / n) * chartW + gap / 2;
+    var bh = (values[i] / max) * chartH;
+    var y = pad.top + chartH - bh;
+    var col = Array.isArray(colors) ? colors[i % colors.length] : colors;
+    ctx.fillStyle = col;
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(x, y, barW, bh, 3) : ctx.rect(x, y, barW, bh);
+    ctx.fill();
+
+    // label
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.font = '9px DM Mono,monospace';
+    ctx.textAlign = 'center';
+    ctx.save();
+    ctx.translate(x + barW / 2, pad.top + chartH + 8);
+    ctx.rotate(-Math.PI / 4);
+    var lbl = labels[i];
+    if (lbl.length > 14) lbl = lbl.slice(0, 13) + '…';
+    ctx.fillText(lbl, 0, 0);
+    ctx.restore();
+  }
+}
+
+function drawHBar(id, labels, values, color, opts) {
+  opts = opts || {};
+  var h = Math.max(200, labels.length * 28 + 40);
+  var c = setupCanvas(id, h);
+  if (!c) return;
+  var ctx = c.ctx, W = c.w, H = c.h;
+  var padL = opts.padL || 180, padR = 80, padT = 10, padB = 10;
+  var chartW = W - padL - padR;
+  ctx.clearRect(0, 0, W, H);
+  var max = Math.max.apply(null, values) || 1;
+  var rowH = (H - padT - padB) / labels.length;
+
+  for (var i = 0; i < labels.length; i++) {
+    var y = padT + i * rowH;
+    var bh = rowH * 0.55;
+    var bw = (values[i] / max) * chartW;
+    var col = Array.isArray(color) ? color[i % color.length] : color;
+
+    ctx.fillStyle = col;
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(padL, y + (rowH - bh) / 2, bw, bh, 3) : ctx.rect(padL, y + (rowH - bh) / 2, bw, bh);
+    ctx.fill();
+
+    // label
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.font = '10px DM Mono,monospace';
+    ctx.textAlign = 'right';
+    var lbl = labels[i];
+    if (lbl.length > 22) lbl = lbl.slice(0, 21) + '…';
+    ctx.fillText(lbl, padL - 8, y + rowH / 2 + 4);
+
+    // value
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.textAlign = 'left';
+    ctx.fillText(fmt(values[i]), padL + bw + 6, y + rowH / 2 + 4);
+  }
+}
+
+function drawPie(id, labels, values, colors) {
+  var c = setupCanvas(id, 260);
+  if (!c) return;
+  var ctx = c.ctx, W = c.w, H = c.h;
+  ctx.clearRect(0, 0, W, H);
+  var total = values.reduce(function(a, b){ return a + b; }, 0);
+  if (!total) return;
+  var cx = W * 0.38, cy = H / 2, r = Math.max(10, Math.min(cx, cy) * 0.8);
+  var start = -Math.PI / 2;
+
+  for (var i = 0; i < values.length; i++) {
+    var slice = (values[i] / total) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, start, start + slice);
+    ctx.closePath();
+    ctx.fillStyle = colors[i % colors.length];
+    ctx.fill();
+    ctx.strokeStyle = '#0a0a0f';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    start += slice;
+  }
+
+  // donut hole
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 0.55, 0, Math.PI * 2);
+  ctx.fillStyle = '#111118';
+  ctx.fill();
+
+  // legend
+  var lx = W * 0.72, ly = H / 2 - (labels.length * 18) / 2;
+  for (var j = 0; j < labels.length; j++) {
+    ctx.fillStyle = colors[j % colors.length];
+    ctx.fillRect(lx, ly + j * 18, 10, 10);
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = '9px DM Mono,monospace';
+    ctx.textAlign = 'left';
+    var pct = (values[j] / total * 100).toFixed(1) + '%';
+    var lbl2 = labels[j];
+    if (lbl2.length > 14) lbl2 = lbl2.slice(0, 13) + '…';
+    ctx.fillText(lbl2 + ' ' + pct, lx + 14, ly + j * 18 + 9);
+  }
+}
+
+function drawGroupedBar(id, groupLabels, datasets, opts) {
+  opts = opts || {};
+  var c = setupCanvas(id, opts.h || 300);
+  if (!c) return;
+  var ctx = c.ctx, W = c.w, H = c.h;
+  var pad = {top:20, right:20, bottom:50, left:80};
+  var chartW = W - pad.left - pad.right;
+  var chartH = H - pad.top - pad.bottom;
+  ctx.clearRect(0, 0, W, H);
+
+  var allVals = [];
+  datasets.forEach(function(ds){ ds.data.forEach(function(v){ allVals.push(v); }); });
+  var max = Math.max.apply(null, allVals) * 1.1 || 1;
+  var n = groupLabels.length;
+  var dsN = datasets.length;
+  var groupW = chartW / n;
+  var barW = groupW * 0.8 / dsN;
+
+  // grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 1;
+  for (var gi = 0; gi <= 4; gi++) {
+    var gy = pad.top + chartH - (gi / 4) * chartH;
+    ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(pad.left + chartW, gy); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.font = '9px DM Mono,monospace'; ctx.textAlign = 'right';
+    ctx.fillText(fmt(max * gi / 4), pad.left - 6, gy + 4);
+  }
+
+  for (var i = 0; i < n; i++) {
+    var gx = pad.left + i * groupW + groupW * 0.1;
+    for (var di = 0; di < dsN; di++) {
+      var v = datasets[di].data[i];
+      var bh = (v / max) * chartH;
+      var bx = gx + di * barW;
+      var by = pad.top + chartH - bh;
+      ctx.fillStyle = datasets[di].color;
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(bx, by, barW - 2, bh, 2) : ctx.rect(bx, by, barW - 2, bh);
+      ctx.fill();
+    }
+    ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.font = '9px DM Mono,monospace'; ctx.textAlign = 'center';
+    ctx.fillText(groupLabels[i], pad.left + i * groupW + groupW / 2, H - pad.bottom + 14);
+  }
+
+  // legend
+  var lx = pad.left, ly = 4;
+  datasets.forEach(function(ds, di) {
+    ctx.fillStyle = ds.color; ctx.fillRect(lx + di * 80, ly, 10, 10);
+    ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.font = '9px DM Mono,monospace'; ctx.textAlign = 'left';
+    ctx.fillText(ds.label, lx + di * 80 + 14, ly + 9);
+  });
+}
+
+function drawStackedBar(id, labels, datasets, opts) {
+  opts = opts || {};
+  var c = setupCanvas(id, opts.h || 300);
+  if (!c) return;
+  var ctx = c.ctx, W = c.w, H = c.h;
+  var pad = {top:30, right:20, bottom:50, left:70};
+  var chartW = W - pad.left - pad.right;
+  var chartH = H - pad.top - pad.bottom;
+  ctx.clearRect(0, 0, W, H);
+
+  var totals = labels.map(function(_, i) {
+    return datasets.reduce(function(s, ds){ return s + (ds.data[i] || 0); }, 0);
+  });
+  var max = Math.max.apply(null, totals) * 1.1 || 1;
+  var n = labels.length;
+  var barW = Math.max(4, (chartW / n) * 0.75);
+  var gap = (chartW / n) * 0.25;
+
+  for (var gi = 0; gi <= 4; gi++) {
+    var gy = pad.top + chartH - (gi / 4) * chartH;
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(pad.left + chartW, gy); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.font = '9px DM Mono,monospace'; ctx.textAlign = 'right';
+    ctx.fillText(fmt(max * gi / 4), pad.left - 4, gy + 4);
+  }
+
+  for (var i = 0; i < n; i++) {
+    var x = pad.left + (i / n) * chartW + gap / 2;
+    var yBase = pad.top + chartH;
+    for (var di = 0; di < datasets.length; di++) {
+      var v = datasets[di].data[i] || 0;
+      var bh = (v / max) * chartH;
+      yBase -= bh;
+      ctx.fillStyle = datasets[di].color;
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(x, yBase, barW, bh, 1) : ctx.rect(x, yBase, barW, bh);
+      ctx.fill();
+    }
+    ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.font = '9px DM Mono,monospace'; ctx.textAlign = 'center';
+    ctx.save();
+    ctx.translate(x + barW / 2, H - pad.bottom + 8);
+    if (n > 6) { ctx.rotate(-Math.PI / 5); }
+    ctx.fillText(labels[i], 0, 0);
+    ctx.restore();
+  }
+
+  // legend top
+  var lx = pad.left;
+  datasets.forEach(function(ds, di) {
+    if (di * 90 + 90 > chartW) return;
+    ctx.fillStyle = ds.color; ctx.fillRect(lx + di * 90, 4, 8, 8);
+    ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.font = '8px DM Mono,monospace'; ctx.textAlign = 'left';
+    ctx.fillText(ds.label, lx + di * 90 + 12, 12);
+  });
+}
+
+// ─── TABLE BUILDERS ───────────────────────────────────────────────────────
+function buildLineTable(tbodyId, lines, total) {
+  var tb = document.getElementById(tbodyId);
+  if (!tb) return;
+  var sorted = lines.slice().sort(function(a, b){ return b.v - a.v; });
+  sorted.forEach(function(d, i) {
+    var pct = (d.v / total * 100).toFixed(1);
+    var tr = document.createElement('tr');
+    var cls = i === 0 ? 't1' : i < 3 ? 't3' : '';
+    tr.innerHTML = '<td><span class="rb ' + cls + '">' + (i+1) + '</span></td>'
+      + '<td>' + d.n + '</td>'
+      + '<td class="amtc">' + fmtFull(d.v) + '</td>'
+      + '<td>' + pct + '%</td>'
+      + '<td><div class="barm" style="width:' + Math.min(parseFloat(pct) * 1.5, 100) + '%"></div></td>';
+    tb.appendChild(tr);
+  });
+}
+
+function buildClientTable(tbodyId, clients, total) {
+  var tb = document.getElementById(tbodyId);
+  if (!tb) return;
+  clients.forEach(function(d, i) {
+    var pct = (d.v / total * 100).toFixed(1);
+    var tr = document.createElement('tr');
+    var cls = i === 0 ? 't1' : i < 3 ? 't3' : '';
+    tr.innerHTML = '<td><span class="rb ' + cls + '">' + (i+1) + '</span></td>'
+      + '<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + d.n + '</td>'
+      + '<td class="amtc">' + fmt(d.v) + '</td>'
+      + '<td>' + pct + '%</td>'
+      + '<td><div class="barm" style="width:' + Math.min(parseFloat(pct) * 4, 100) + '%"></div></td>';
+    tb.appendChild(tr);
+  });
+}
+
+function buildMonthTable(tbodyId, rows) {
+  var tb = document.getElementById(tbodyId);
+  if (!tb) return;
+  rows.forEach(function(d) {
+    var others = Math.max(0, d.tot - d.ep - d.r - d.bc - d.cp - d.eg - d.bp);
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td style="white-space:nowrap;color:rgba(255,255,255,0.4)">' + d.m + '</td>'
+      + '<td>' + fmt(d.ep) + '</td>'
+      + '<td>' + (d.r > 0 ? fmt(d.r) : '—') + '</td>'
+      + '<td>' + fmt(d.bc) + '</td>'
+      + '<td>' + (d.cp > 0 ? fmt(d.cp) : '—') + '</td>'
+      + '<td>' + fmt(d.eg) + '</td>'
+      + '<td>' + fmt(d.bp) + '</td>'
+      + '<td>' + (others > 1000 ? fmt(others) : '—') + '</td>'
+      + '<td class="amtc">' + fmt(d.tot) + '</td>';
+    tb.appendChild(tr);
+  });
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────
+window.addEventListener('load', function() {
+  // Defer drawing until after first paint so layout is complete
+  requestAnimationFrame(function() { requestAnimationFrame(function() { initCharts(); }); });
+});
+function initCharts() {
+
+  // ── P1 LÍNEAS ──
+  var allLines = [
+    {n:'Eco Personalizada',v:599603621},{n:'Riñón',v:77273872},
+    {n:'Basura Compost',v:66813796},{n:'Camiseta Personalizada',v:50847866},
+    {n:'Eco Genérica',v:37125419},{n:'Basura Plástico',v:26929406},
+    {n:'Plástico Personalizada',v:15803400},{n:'Eco Serigrafía',v:12365922},
+    {n:'Pan Plástica',v:10568809},{n:'Camiseta Genérica',v:8919165},
+    {n:'Bolsa Weed',v:6041650},{n:'Materia Prima',v:4927500},
+    {n:'Eco Plástico Pers.',v:3221210},{n:'Prepicada Rollo',v:2435000},
+    {n:'Sanitización',v:960000},{n:'Tote Serigrafía',v:145000}
+  ];
+  var totalAll = 923981636;
+
+  drawPie('c1a', allLines.map(function(d){return d.n;}), allLines.map(function(d){return d.v;}), PAL);
+  drawPie('c1b', ['Chile','China'], [497886010, 426095626], [Y25, Y26]);
+  buildLineTable('tb-all', allLines, totalAll);
+
+  drawPie('c24a', lines24.map(function(d){return d.n;}), lines24.map(function(d){return d.v;}), PAL);
+  drawPie('c24b', ['Chile','China'], [67881011, 22161935], [Y24, Y26]);
+  buildLineTable('tb-24', lines24, total24);
+
+  drawPie('c25a', lines25.map(function(d){return d.n;}), lines25.map(function(d){return d.v;}), PAL);
+  drawPie('c25b', ['Chile','China'], [237068775, 302446552], [Y25, Y26]);
+  buildLineTable('tb-25', lines25, total25);
+
+  drawPie('c26a', lines26.map(function(d){return d.n;}), lines26.map(function(d){return d.v;}), PAL);
+  drawPie('c26b', ['Chile','China'], [192936224, 101487139], [Y26, '#a78bfa']);
+  buildLineTable('tb-26', lines26, total26);
+
+  // ── P2 CLIENTES ──
+  buildClientTable('tb-c24', clients24, total24);
+  buildClientTable('tb-c25', clients25, total25);
+  buildClientTable('tb-c26', clients26, total26);
+
+  drawHBar('c2_24', clients24.map(function(d){return d.n;}), clients24.map(function(d){return d.v;}), Y24, {h: clients24.length * 28 + 40});
+  drawHBar('c2_25', clients25.map(function(d){return d.n;}), clients25.map(function(d){return d.v;}), Y25, {h: clients25.length * 28 + 40});
+  drawHBar('c2_26', clients26.map(function(d){return d.n;}), clients26.map(function(d){return d.v;}), Y26, {h: clients26.length * 28 + 40});
+
+  var cmpLabels = ['Bata Chile','Comer. Under','Badamax','JDR Desarr.','Maletas Chile','ADF Chile','Gardenlife','Kuprem','Far. Similares','LBB produc.'];
+  drawGroupedBar('c2cmp', cmpLabels, [
+    {label:'2024', color: Y24+'bb', data:[12834620,0,6702496,1170000,0,0,3317277,3457600,0,0]},
+    {label:'2025', color: Y25, data:[76338120,40436400,53751460,15210864,7986767,1762000,5508955,11816600,9300000,8233113]},
+    {label:'2026', color: Y26, data:[28919900,33781900,0,14659800,12658110,17166000,3153700,0,5862500,4834956]}
+  ], {h: 380});
+
+  drawGroupedBar('c2conc', ['Top 1','Top 3','Top 5','Top 10'], [
+    {label:'2024', color: Y24, data:[14.3,32.0,46.0,62.9]},
+    {label:'2025', color: Y25, data:[14.1,31.6,38.6,46.9]},
+    {label:'2026', color: Y26, data:[11.5,27.2,39.4,56.5]}
+  ], {h: 260});
+
+  drawBar('c2recu', ['Solo 1 año','2 años','Los 3 años'], [32, 7, 3], [Y24, Y25, Y26], {h: 260, pad:{top:20,right:20,bottom:40,left:60}});
+
+  // ── P3 MENSUAL ──
+  buildMonthTable('tb-mall', monthly);
+  buildMonthTable('tb-m24', monthly.filter(function(d){return d.yr===24;}));
+  buildMonthTable('tb-m25', monthly.filter(function(d){return d.yr===25;}));
+  buildMonthTable('tb-m26', monthly.filter(function(d){return d.yr===26;}));
+
+  var mLabels = monthly.map(function(d){return d.m;});
+  var mColors = monthly.map(function(d){return d.yr===24?Y24:d.yr===25?Y25:Y26;});
+
+  drawBar('c3all', mLabels, monthly.map(function(d){return d.tot;}), mColors, {h:320, pad:{top:20,right:20,bottom:70,left:80}});
+
+  drawStackedBar('c3mix', mLabels, [
+    {label:'Eco Pers.', color:Y25, data:monthly.map(function(d){return d.ep;})},
+    {label:'Riñón', color:Y26, data:monthly.map(function(d){return d.r;})},
+    {label:'B.Compost', color:'#4ade80', data:monthly.map(function(d){return d.bc;})},
+    {label:'Cam.Pers.', color:Y24, data:monthly.map(function(d){return d.cp;})},
+    {label:'Otros', color:'rgba(255,255,255,0.12)', data:monthly.map(function(d){return Math.max(0,d.tot-d.ep-d.r-d.bc-d.cp);})}
+  ], {h:280});
+
+  var chileByMonth = [67881011/3,67881011/3,67881011/3,237068775/12,237068775/12,237068775/12,237068775/12,237068775/12,237068775/12,237068775/12,237068775/12,237068775/12,237068775/12,237068775/12,237068775/12,192936224/6,192936224/6,192936224/6,192936224/6,192936224/6,192936224/6];
+  var chinaByMonth = [22161935/3,22161935/3,22161935/3,302446552/12,302446552/12,302446552/12,302446552/12,302446552/12,302446552/12,302446552/12,302446552/12,302446552/12,302446552/12,302446552/12,302446552/12,101487139/6,101487139/6,101487139/6,101487139/6,101487139/6,101487139/6];
+  drawGroupedBar('c3origen', mLabels, [
+    {label:'Chile', color:Y25, data:chileByMonth},
+    {label:'China', color:Y26, data:chinaByMonth}
+  ], {h:280});
+
+  var m24 = monthly.filter(function(d){return d.yr===24;});
+  var m25 = monthly.filter(function(d){return d.yr===25;});
+  var m26 = monthly.filter(function(d){return d.yr===26;});
+
+  drawStackedBar('c3_24', m24.map(function(d){return d.m;}), [
+    {label:'Eco Pers.', color:Y25, data:m24.map(function(d){return d.ep;})},
+    {label:'Riñón', color:Y26, data:m24.map(function(d){return d.r;})},
+    {label:'Resto', color:'rgba(255,255,255,0.15)', data:m24.map(function(d){return Math.max(0,d.tot-d.ep-d.r);})}
+  ], {h:280});
+
+  drawStackedBar('c3_25', m25.map(function(d){return d.m;}), [
+    {label:'Eco Pers.', color:Y25, data:m25.map(function(d){return d.ep;})},
+    {label:'Riñón', color:Y26, data:m25.map(function(d){return d.r;})},
+    {label:'B.Compost', color:'#4ade80', data:m25.map(function(d){return d.bc;})},
+    {label:'Cam.Pers.', color:Y24, data:m25.map(function(d){return d.cp;})},
+    {label:'Otros', color:'rgba(255,255,255,0.12)', data:m25.map(function(d){return Math.max(0,d.tot-d.ep-d.r-d.bc-d.cp);})}
+  ], {h:300});
+
+  drawStackedBar('c3_26', m26.map(function(d){return d.m;}), [
+    {label:'Eco Pers.', color:Y25, data:m26.map(function(d){return d.ep;})},
+    {label:'Riñón', color:Y26, data:m26.map(function(d){return d.r;})},
+    {label:'B.Compost', color:'#4ade80', data:m26.map(function(d){return d.bc;})},
+    {label:'Otros', color:'rgba(255,255,255,0.12)', data:m26.map(function(d){return Math.max(0,d.tot-d.ep-d.r-d.bc);})}
+  ], {h:280});
+
+  // ── P4 COMPARATIVO ──
+  drawStackedBar('c4pie', ['2024','2025','2026'], [
+    {label:'Eco Personalizada', color:Y25, data:[65788908, 351457533, 182357180]},
+    {label:'Riñón', color:Y26, data:[10127476, 34180940, 32965456]},
+    {label:'Resto', color:'rgba(255,255,255,0.15)', data:[14126562, 153876854, 79100727]}
+  ], {h:260});
+
+  drawGroupedBar('c4origen', ['2024 (3M)','2025 (12M)','2026 (6M)'], [
+    {label:'Chile', color:Y25, data:[67881011, 237068775, 192936224]},
+    {label:'China', color:Y26, data:[22161935, 302446552, 101487139]}
+  ], {h:260});
+
+  var cmpLines = [
+    {n:'Eco Personalizada', v24:65788908, v25:351457533, v26:182357180},
+    {n:'Riñón', v24:10127476, v25:34180940, v26:32965456},
+    {n:'Basura Compost', v24:3453057, v25:40489313, v26:22871426},
+    {n:'Camiseta Personalizada', v24:4681503, v25:29461379, v26:16704984},
+    {n:'Eco Genérica', v24:1547182, v25:25167136, v26:10411101},
+    {n:'Basura Plástico', v24:2482674, v25:15652442, v26:8794290},
+    {n:'Plástico Personalizada', v24:0, v25:11925400, v26:3878000},
+    {n:'Eco Serigrafía', v24:1321146, v25:7506688, v26:3538088},
+    {n:'Pan Plástica', v24:0, v25:6128353, v26:4440456},
+    {n:'Camiseta Genérica', v24:641000, v25:5568643, v26:2709522},
+    {n:'Bolsa Weed', v24:0, v25:4325000, v26:1716650},
+    {n:'Materia Prima', v24:0, v25:4927500, v26:0},
+    {n:'Prepicada Rollo', v24:0, v25:1620000, v26:815000},
+    {n:'Eco Plástico Pers.', v24:0, v25:0, v26:3221210},
+    {n:'Sanitización', v24:0, v25:960000, v26:0},
+    {n:'Tote Serigrafía', v24:0, v25:145000, v26:0}
+  ];
+
+  drawGroupedBar('c4all', cmpLines.slice(0,8).map(function(d){return d.n.replace('Personalizada','Pers.').replace('Serigrafía','Serig.');}), [
+    {label:'2024', color:Y24+'bb', data:cmpLines.slice(0,8).map(function(d){return d.v24;})},
+    {label:'2025', color:Y25, data:cmpLines.slice(0,8).map(function(d){return d.v25;})},
+    {label:'2026', color:Y26, data:cmpLines.slice(0,8).map(function(d){return d.v26;})}
+  ], {h:320});
+
+  var tbCmp = document.getElementById('tb-cmp');
+  cmpLines.forEach(function(d) {
+    var p24 = d.v24 > 0 ? (d.v24 / total24 * 100).toFixed(1) + '%' : '—';
+    var p25 = d.v25 > 0 ? (d.v25 / total25 * 100).toFixed(1) + '%' : '—';
+    var p26 = d.v26 > 0 ? (d.v26 / total26 * 100).toFixed(1) + '%' : '—';
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td style="color:var(--text)">' + d.n + '</td>'
+      + '<td class="' + (d.v24 > 0 ? 'amtc' : '') + '">' + (d.v24 > 0 ? fmt(d.v24) : '—') + '</td><td>' + p24 + '</td>'
+      + '<td class="' + (d.v25 > 0 ? 'amtc' : '') + '">' + (d.v25 > 0 ? fmt(d.v25) : '—') + '</td><td>' + p25 + '</td>'
+      + '<td class="' + (d.v26 > 0 ? 'amtc' : '') + '">' + (d.v26 > 0 ? fmt(d.v26) : '—') + '</td><td>' + p26 + '</td>';
+    tbCmp.appendChild(tr);
+  });
+
+} // end initCharts
+</script>
+</body>
+</html>
